@@ -103,14 +103,14 @@ describe('Carrito de compras', () => {
     test('el IVA es el 19 % del subtotal cuando no hay cupón', () => {
       carrito.agregar('Mouse', 50000, 2);
       assert.equal(carrito.iva(), 19000);
-      assert.equal(carrito.total(), 119000);
+      assert.equal(carrito.total(), 131000);
     });
 
     test('el IVA se calcula sobre el valor con descuento', () => {
       carrito.agregar('Mouse', 50000, 2);
       carrito.aplicarCupon('DESC10');
       assert.equal(carrito.iva(), 17100);
-      assert.equal(carrito.total(), 107100);
+      assert.equal(carrito.total(), 119100);
     });
 
     test('un carrito vacío tiene total 0', () => {
@@ -126,7 +126,8 @@ describe('Carrito de compras', () => {
         subtotal: 100000,
         descuento: 10000,
         iva: 17100,
-        total: 107100,
+        envio: 12000,
+        total: 119100,
       });
     });
 
@@ -135,8 +136,48 @@ describe('Carrito de compras', () => {
         subtotal: 0,
         descuento: 0,
         iva: 0,
+        envio: 0,
         total: 0,
       });
+    });
+  });
+
+  describe('Reto B: costo de envío', () => {
+    test('el envío cuesta 12000 si la base gravable es menor a 150000', () => {
+      carrito.agregar('Mouse', 50000, 2);
+      assert.equal(carrito.envio(), 12000);
+    });
+
+    test('el envío es gratis si la base gravable es exactamente 150000', () => {
+      carrito.agregar('Monitor', 150000, 1);
+      assert.equal(carrito.envio(), 0);
+    });
+
+    test('el envío cuesta 12000 con una base de 149999', () => {
+      carrito.agregar('Cable', 149999, 1);
+      assert.equal(carrito.envio(), 12000);
+    });
+
+    test('el envío se evalúa sobre la base con descuento', () => {
+      carrito.agregar('Monitor', 160000, 1);
+      carrito.aplicarCupon('DESC10');
+      assert.equal(carrito.baseGravable(), 144000);
+      assert.equal(carrito.envio(), 12000);
+    });
+
+    test('el total incluye el envío y el envío no paga IVA', () => {
+      carrito.agregar('Mouse', 50000, 2);
+      assert.equal(carrito.iva(), 19000);
+      assert.equal(carrito.total(), 131000);
+    });
+
+    test('con envío gratis el total no suma envío', () => {
+      carrito.agregar('Monitor', 150000, 1);
+      assert.equal(carrito.total(), 178500);
+    });
+
+    test('un carrito vacío no cobra envío', () => {
+      assert.equal(carrito.envio(), 0);
     });
   });
 });
