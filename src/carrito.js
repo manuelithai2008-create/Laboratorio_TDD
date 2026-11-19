@@ -3,8 +3,9 @@ const ENVIO = 12000;
 const ENVIO_GRATIS_DESDE = 150000;
 
 const CUPONES = {
-  DESC10: 0.10,
-  DESC20: 0.20,
+  DESC10: { tipo: 'porcentaje', valor: 0.10 },
+  DESC20: { tipo: 'porcentaje', valor: 0.20 },
+  MENOS30K: { tipo: 'fijo', valor: 30000 },
 };
 
 const normalizarCodigo = (codigo) => String(codigo).trim().toUpperCase();
@@ -71,7 +72,11 @@ export class Carrito {
 
   descuento() {
     if (!this.cupon) return 0;
-    return Math.round(this.subtotal() * CUPONES[this.cupon]);
+    const { tipo, valor } = CUPONES[this.cupon];
+    if (tipo === 'fijo') {
+      return Math.min(valor, this.subtotal());
+    }
+    return Math.round(this.subtotal() * valor);
   }
 
   baseGravable() {

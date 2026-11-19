@@ -229,4 +229,27 @@ describe('Carrito de compras', () => {
       assert.throws(() => carrito.aplicarCupon(' gratis '), /no es válido/);
     });
   });
+
+  describe('Reto E: cupón de valor fijo', () => {
+    test('MENOS30K resta 30000 al subtotal', () => {
+      carrito.agregar('Teclado', 200000, 1);
+      carrito.aplicarCupon('MENOS30K');
+      assert.equal(carrito.descuento(), 30000);
+      assert.equal(carrito.baseGravable(), 170000);
+    });
+
+    test('el descuento fijo nunca deja la base en negativo', () => {
+      carrito.agregar('Cable', 20000, 1);
+      carrito.aplicarCupon('MENOS30K');
+      assert.equal(carrito.descuento(), 20000);
+      assert.equal(carrito.baseGravable(), 0);
+      assert.equal(carrito.iva(), 0);
+    });
+
+    test('los cupones de porcentaje siguen funcionando', () => {
+      carrito.agregar('Teclado', 200000, 1);
+      carrito.aplicarCupon('DESC10');
+      assert.equal(carrito.descuento(), 20000);
+    });
+  });
 });
