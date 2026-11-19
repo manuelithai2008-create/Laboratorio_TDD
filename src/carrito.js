@@ -1,3 +1,5 @@
+const IVA = 0.19;
+
 const CUPONES = {
   DESC10: 0.10,
   DESC20: 0.20,
@@ -50,5 +52,13 @@ export class Carrito {
   descuento() {
     if (!this.cupon) return 0;
     return Math.round(this.subtotal() * CUPONES[this.cupon]);
+  }
+
+  iva() {
+    return Math.round((this.subtotal() - this.descuento()) * IVA);
+  }
+
+  total() {
+    return this.subtotal() - this.descuento() + this.iva();
   }
 }
