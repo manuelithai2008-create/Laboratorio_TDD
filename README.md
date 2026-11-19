@@ -8,3 +8,8 @@ npm run test:watch  # vuelve a ejecutarlas cada vez que guardas
 ```
 
 Sigue la guía del taller: primero la prueba (rojo), luego el código mínimo (verde) y por último la mejora (refactor).
+
+## Integrantes
+
+- Manuela
+- Cristian Velasquez
