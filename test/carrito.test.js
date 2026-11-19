@@ -180,4 +180,35 @@ describe('Carrito de compras', () => {
       assert.equal(carrito.envio(), 0);
     });
   });
+
+  describe('Reto C: actualizar cantidad', () => {
+    test('actualizar la cantidad reemplaza el valor anterior', () => {
+      carrito.agregar('Mouse', 50000, 2);
+      carrito.actualizarCantidad('Mouse', 5);
+      assert.equal(carrito.cantidadDeItems(), 5);
+      assert.equal(carrito.subtotal(), 250000);
+    });
+
+    test('si la nueva cantidad es 0 el producto se elimina', () => {
+      carrito.agregar('Mouse', 50000, 2);
+      carrito.agregar('Teclado', 120000, 1);
+      carrito.actualizarCantidad('Mouse', 0);
+      assert.equal(carrito.productos.length, 1);
+      assert.equal(carrito.subtotal(), 120000);
+    });
+
+    test('una cantidad negativa lanza un error', () => {
+      carrito.agregar('Mouse', 50000, 2);
+      assert.throws(() => carrito.actualizarCantidad('Mouse', -1), /cantidad/);
+    });
+
+    test('una cantidad decimal lanza un error', () => {
+      carrito.agregar('Mouse', 50000, 2);
+      assert.throws(() => carrito.actualizarCantidad('Mouse', 1.5), /cantidad/);
+    });
+
+    test('actualizar un producto que no existe lanza un error', () => {
+      assert.throws(() => carrito.actualizarCantidad('Monitor', 2), /no está en el carrito/);
+    });
+  });
 });

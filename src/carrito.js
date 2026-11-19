@@ -36,6 +36,21 @@ export class Carrito {
     this.productos.splice(indice, 1);
   }
 
+  actualizarCantidad(nombre, nueva) {
+    if (!Number.isInteger(nueva) || nueva < 0) {
+      throw new Error('La cantidad debe ser un entero positivo o cero');
+    }
+    if (nueva === 0) {
+      this.eliminar(nombre);
+      return;
+    }
+    const existente = this.productos.find((p) => p.nombre === nombre);
+    if (!existente) {
+      throw new Error(`El producto "${nombre}" no está en el carrito`);
+    }
+    existente.cantidad = nueva;
+  }
+
   cantidadDeItems() {
     return this.productos.reduce((suma, p) => suma + p.cantidad, 0);
   }
