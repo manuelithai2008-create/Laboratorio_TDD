@@ -13,3 +13,8 @@ Sigue la guía del taller: primero la prueba (rojo), luego el código mínimo (v
 
 - Manuela
 - Cristian Velasquez
+
+## Integrantes
+
+- Manuela
+- Cristian Velasques
