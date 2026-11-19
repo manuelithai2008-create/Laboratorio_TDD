@@ -211,4 +211,22 @@ describe('Carrito de compras', () => {
       assert.throws(() => carrito.actualizarCantidad('Monitor', 2), /no está en el carrito/);
     });
   });
+
+  describe('Reto D: cupones sin importar mayúsculas', () => {
+    test('el cupón en minúsculas funciona', () => {
+      carrito.agregar('Teclado', 200000, 1);
+      carrito.aplicarCupon('desc10');
+      assert.equal(carrito.descuento(), 20000);
+    });
+
+    test('el cupón con espacios funciona', () => {
+      carrito.agregar('Teclado', 200000, 1);
+      carrito.aplicarCupon('  DESC20  ');
+      assert.equal(carrito.descuento(), 40000);
+    });
+
+    test('un cupón inexistente con espacios sigue lanzando error', () => {
+      assert.throws(() => carrito.aplicarCupon(' gratis '), /no es válido/);
+    });
+  });
 });

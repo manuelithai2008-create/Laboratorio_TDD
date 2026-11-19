@@ -7,6 +7,8 @@ const CUPONES = {
   DESC20: 0.20,
 };
 
+const normalizarCodigo = (codigo) => String(codigo).trim().toUpperCase();
+
 export class Carrito {
   constructor() {
     this.productos = [];
@@ -60,10 +62,11 @@ export class Carrito {
   }
 
   aplicarCupon(codigo) {
-    if (!(codigo in CUPONES)) {
+    const normalizado = normalizarCodigo(codigo);
+    if (!(normalizado in CUPONES)) {
       throw new Error(`El cupón "${codigo}" no es válido`);
     }
-    this.cupon = codigo;
+    this.cupon = normalizado;
   }
 
   descuento() {
